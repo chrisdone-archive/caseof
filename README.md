@@ -45,9 +45,9 @@ What's the point of `caseOf`? To more easily dispatch on functions:
 ```haskell
 handleHuman name age = ...
 handleMachine id = ..
-handleWithDefault =
+handleWithDefault def =
    $(caseOf 'Human) handleHuman .
-   $(caseOf 'Machine) handleMachine
+   $(caseOf 'Machine) handleMachine def
 ```
 
 This applies to any kind of "case" that you'd like to refactor into a function.
