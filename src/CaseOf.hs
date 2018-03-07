@@ -15,6 +15,8 @@ import Language.Haskell.TH
 import Language.Haskell.TH.Syntax
 
 -- | Create a predicate that returns true if its argument is the given constructor.
+--
+-- @$(isCaseOf 'Left) :: Either a b -> Bool@
 isCaseOf :: Name -> Q Exp
 isCaseOf input = do
   name <- nameAsValue input
@@ -25,6 +27,8 @@ isCaseOf input = do
        ])
 
 -- | Return Just (x, y, ..) for the constructor C x y .., or Nothing.
+--
+-- @$(maybeCaseOf 'Left) :: Either a b -> Maybe a@
 maybeCaseOf :: Name -> Q Exp
 maybeCaseOf input = do
   name <- nameAsValue input
@@ -49,6 +53,8 @@ maybeCaseOf input = do
 
 -- | Apply a function to the slots of a constructor, if it matches,
 -- otherwise identity.
+--
+-- @$(mapCaseOf 'Left) :: (a -> a) -> Either a b -> Either a b@
 mapCaseOf :: Name -> Q Exp
 mapCaseOf input = do
   name <- nameAsValue input
@@ -80,6 +86,8 @@ mapCaseOf input = do
 
 -- | Call a function with arguments from the constructor if it
 -- matches, or pass it to the wildcard function.
+--
+-- @$(caseOf 'Left) :: (t -> p) -> (Either t b -> p) -> Either t b -> p@
 caseOf :: Name -> Q Exp
 caseOf input = do
   name <- nameAsValue input
