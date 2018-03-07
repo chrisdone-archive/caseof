@@ -3,6 +3,9 @@
 A simple way to query constructors, like cases but slightly more
 concise.
 
+Prisms from the lens package can also manage this, but this is a bit
+simpler.
+
 Aimed at sum types with many constructors:
 
 ``` haskell
