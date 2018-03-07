@@ -3,9 +3,6 @@
 A simple way to query constructors, like cases but slightly more
 concise.
 
-Prisms from the lens package can also manage this, but this is a bit
-simpler.
-
 Aimed at sum types with many constructors:
 
 ``` haskell
@@ -50,3 +47,11 @@ extra-deps:
 - git: https://github.com/chrisdone/caseof.git
   commit: 9a7f6bb
 ```
+
+## Lens prisms
+
+For me, the `lens` approach (aside from being a big dependency) has
+these downsides: a complicated set of types and a requirement to
+derive prisms for the types, which enter the namespace. The downside
+for `caseof` is the TH requirement, but it is dead simple. You just
+read this README in 20 seconds.
