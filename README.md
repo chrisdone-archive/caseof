@@ -51,3 +51,13 @@ handleWithDefault =
 ```
 
 This applies to any kind of "case" that you'd like to refactor into a function.
+
+## Use in your project
+
+In your stack.yaml, put:
+
+```
+extra-deps:
+- git: https://github.com/chrisdone/caseof.git
+  commit: 9a7f6bb
+```
