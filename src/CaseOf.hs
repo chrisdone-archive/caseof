@@ -2,7 +2,14 @@
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE TemplateHaskell #-}
 
-module CaseOf where
+-- | Template-Haskell-based combinators that let you select on constructors.
+
+module CaseOf
+  (isCaseOf
+  ,maybeCaseOf
+  ,mapCaseOf
+  ,caseOf)
+  where
 
 import Language.Haskell.TH
 import Language.Haskell.TH.Syntax
@@ -34,6 +41,37 @@ maybeCaseOf input = do
            ])
     _ -> fail ("Invalid data constructor " ++ pprint input)
   where
+    varI i = VarE (mkName ("v" ++ show i))
+    patI i = VarP (mkName ("v" ++ show i))
+    arity (ForallT _ _ t) = arity t
+    arity (AppT (AppT ArrowT _) y) = 1 + arity y
+    arity _ = 0
+
+-- | Apply a function to the slots of a constructor, if it matches,
+-- otherwise identity.
+mapCaseOf :: Name -> Q Exp
+mapCaseOf input = do
+  name <- nameAsValue input
+  info <- reify name
+  case info of
+    DataConI _ ty _ ->
+      pure
+        (LamE
+           [VarP f]
+           (LamCaseE
+              [ Match
+                  (ConP name (map patI [1 .. arity ty]))
+                  (NormalB
+                     (AppE
+                        (ConE name)
+                        (foldl AppE (VarE f) (map varI [1 .. arity ty]))))
+                  []
+              , Match (VarP this) (NormalB (VarE this)) []
+              ]))
+    _ -> fail ("Invalid data constructor " ++ pprint input)
+  where
+    f = mkName "f"
+    this = mkName "this"
     varI i = VarE (mkName ("v" ++ show i))
     patI i = VarP (mkName ("v" ++ show i))
     arity (ForallT _ _ t) = arity t

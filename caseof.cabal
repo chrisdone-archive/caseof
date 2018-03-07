@@ -1,5 +1,5 @@
 name:                caseof
-version:             0.0.0
+version:             0.0.1
 synopsis:            Combinators for casing on constructors
 description:         Template-Haskell-based combinators that let you select on constructors.
 homepage:            https://github.com/chrisdone/caseof#readme

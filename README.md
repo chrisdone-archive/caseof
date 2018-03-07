@@ -26,6 +26,13 @@ There is a `Maybe`-based matcher:
 Just (1,'a')
 ```
 
+There is a "map" over a constructor:
+
+``` haskell
+> $(mapCaseOf 'Left) succ (Left 3)
+Left 4
+```
+
 There is a combinator which calls your function with n arguments, or
 passes the whole value to an "else" clause.
 
@@ -33,27 +40,6 @@ passes the whole value to an "else" clause.
 > $(caseOf 'Woo) (\x y -> show x ++ show y) (const "") (Wibble 5)
 ""
 ```
-
-This allows them to be nested:
-
-```haskell
-> $(caseOf 'Woo) (\x y -> show x ++ show y) (const "") (Woo 5 'a')
-"5'a'"
-> $(caseOf 'Woo) (\x y -> show x ++ show y) ($(caseOf 'Wibble) show (const "")) (Woo 5 'a')
-"5'a'"
-```
-
-What's the point of `caseOf`? To more easily dispatch on functions:
-
-```haskell
-handleHuman name age = ...
-handleMachine id = ..
-handleWithDefault def =
-   $(caseOf 'Human) handleHuman .
-   $(caseOf 'Machine) handleMachine def
-```
-
-This applies to any kind of "case" that you'd like to refactor into a function.
 
 ## Use in your project
 
